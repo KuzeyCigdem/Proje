@@ -32,7 +32,7 @@ public class Main {
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
                     // Satırı virgüle göre bölüyoruz
-                    String[] parts= line.split(",");
+                    String[] parts= line.split(",");//"1,Gold,2312"->"1","Gold","2312"
 
                     if (parts.length == 3) {
                         // String verileri çeviriyoruz
@@ -48,7 +48,7 @@ public class Main {
                                 break;
                             }
                         }
-
+                        // Eğer geçerli emtia ve gün ise diziye kaydediyoruz
                         if (commodityIndex != -1 && day >= 1 && day <= DAYS) {
                             profitData[m][commodityIndex][day - 1] = profit;
                         }
@@ -91,7 +91,7 @@ public class Main {
 
     // 2. Belirli bir günde tüm emtiaların toplam karı
     public static int totalProfitOnDay(int month, int day) {
-        // Hatalı giriş kontrolü
+        // Hatalı giriş check
         if (month < 0 || month >= MONTHS || day < 1 || day > DAYS) {
             return -99999;
         }
@@ -102,13 +102,50 @@ public class Main {
         }
         return total;
     }
-
+    // 3. Bir emtianın belirli gün aralığındaki karı (her ayın)
     public static int commodityProfitInRange(String commodity, int from, int to) {
-        return 1234;
+        // Emtia isminden indexi bul
+        int CommodityIndex =-1;
+        for(int i=0; i<COMMS; i++) {
+            if(commodities[i].equals(commodity)) {
+                CommodityIndex = i;
+                break;
+            }
+        }
+        // Hata kontrolleri
+        if (CommodityIndex == -1 || from < 1 || to > DAYS || from > to) {
+            return -99999;
+        }
+        int totalProfit = 0;
+        // any month dediği için 12 ayı da geziyoz
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = from; d <= to; d++) {
+                totalProfit += profitData[m][CommodityIndex][d - 1];
+            }
+        }
+        return totalProfit;
     }
+    // 4. Bir ayın en karlı gününü bulma
+    public static int bestDayOfMonth(int month) {
+        if (month < 0 || month >= MONTHS) {
+            return -1; //doğru ay girme checki
+        }
+        int maxProfit =0;
+        int bestDay = -1;
 
-    public static int bestDayOfMonth(int month) { 
-        return 1234; 
+        // 28 günü kontrol ediyoruz
+        for (int d = 0; d < DAYS; d++) {
+            int dailyTotal = 0;
+            // O günün toplam karını hesapla tüm emtilar için
+            for (int c = 0; c < COMMS; c++) {
+                dailyTotal += profitData[month][c][d];
+            }
+            if (dailyTotal > maxProfit) {
+                maxProfit = dailyTotal;
+                bestDay= d + 1; // Index 0 ise gün 1
+            }
+        }
+        return bestDay;
     }
     
     public static String bestMonthForCommodity(String comm) { 
