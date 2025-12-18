@@ -147,13 +147,68 @@ public class Main {
         }
         return bestDay;
     }
-    
-    public static String bestMonthForCommodity(String comm) { 
-        return "DUMMY"; 
+    // 5.  emtia için en karlı ayı bulma
+    public static String bestMonthForCommodity(String comm) {
+        int commIndex = -1; //commodityi bulma
+        for(int i=0; i<COMMS; i++) {
+            if(commodities[i].equals(comm)) {
+                commIndex = i;
+                break;
+            }
+        }
+        if (commIndex ==-1) return "INVALID COMMODITY";
+        int maxProfit =0;
+        int bestMonthIndex = -1;
+        // 12 ayı geziyoz
+        for (int m = 0; m < MONTHS; m++) {
+            int monthTotal = 0;
+            // O aydaki toplam karı hesapla
+            for (int d = 0; d < DAYS; d++) {
+                monthTotal += profitData[m][commIndex][d];
+            }
+            if (monthTotal > maxProfit) {
+                maxProfit = monthTotal;
+                bestMonthIndex = m;
+            }
+        }
+        return months[bestMonthIndex];
     }
+    // 6. Bir emtianın en uzun süre zarar ettiği zamanı bulur
+    public static int consecutiveLossDays(String comm) {
+        int comIndex = -1;
+        for(int i=0; i<COMMS; i++) {
+            if(commodities[i].equals(comm)) {
+                comIndex = i;
+                break;
+            }
+        }
+        if (comIndex == -1) return -1;
+        int maxStreak = 0;
+        int currentStreak = 0;
 
-    public static int consecutiveLossDays(String comm) { 
-        return 1234; 
+        // Yıllık tüm günleri sırayla geziyoz
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                int profit = profitData[m][comIndex][d];//
+
+                if (profit < 0) {
+                    // Zarar varsa seriyi artır
+                    currentStreak++;
+                } else {
+                    // Kar varsa seri bozuldu max ile kıyasla ve sıfırla
+                    if (currentStreak > maxStreak) {
+                        maxStreak = currentStreak;
+                    }
+                    currentStreak = 0; //seri bozuldu 0 demek
+                }
+            }
+        }
+        // Döngü bittiğinde son seri en büyük olabilir check et
+        if (currentStreak > maxStreak) {
+            maxStreak = currentStreak;
+        }
+
+        return maxStreak;
     }
     
     public static int daysAboveThreshold(String comm, int threshold) { 
