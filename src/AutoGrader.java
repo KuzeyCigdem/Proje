@@ -12,11 +12,11 @@ public class AutoGrader {
      // so students can see if their version of Main.java is compatible with the final AutoGrader test script.
      // When students implement the functions, the tests with dummy values of course will fail.
     static final Object[][] TESTS = {
-        {"mostProfitableCommodityInMonth", new Object[]{0}, "DUMMY"},
+        {"mostProfitableCommodityInMonth", new Object[]{0}, "Gold 71791"},
         {"totalProfitOnDay", new Object[]{0, 15}, 1234},
         {"commodityProfitInRange", new Object[]{"Gold", 1, 14}, 1234},
         {"bestDayOfMonth", new Object[]{0}, 1234},
-        {"bestMonthForCommodity", new Object[]{"Gold"}, "DUMMY"},
+        {"bestMonthForCommodity", new Object[]{"Gold"}, "December"},
         {"consecutiveLossDays", new Object[]{"Gold"}, 1234},
         {"daysAboveThreshold", new Object[]{"Gold", 2000}, 1234},
         {"biggestDailySwing", new Object[]{0}, 1234},
@@ -38,7 +38,7 @@ public class AutoGrader {
     // Compile student version of Main.java and perform all tests on this Main.    
     static int testStudent() throws Exception {
         // compile Main.java
-        Process compile = Runtime.getRuntime().exec("javac Main.java");
+        Process compile = Runtime.getRuntime().exec("javac AutoGrader.java");
         if (compile.waitFor() != 0) {
             System.out.println("COMPILE ERROR - THIS SHOULD NOT HAPPEN");
             return 0;
@@ -46,7 +46,7 @@ public class AutoGrader {
 
         URL url = new File("").toURI().toURL();
         URLClassLoader loader = new URLClassLoader(new URL[]{url});
-        Class<?> cls = loader.loadClass("Gemini");
+        Class<?> cls = loader.loadClass("Main");
         cls.getMethod("loadData").invoke(null);
         
         int score = 0;

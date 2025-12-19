@@ -1,6 +1,7 @@
 // Main.java — Students version
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -9,10 +10,10 @@ public class Main {
     static final int COMMS = 5;
     static String[] commodities = {"Gold", "Oil", "Silver", "Wheat", "Copper"};
     static String[] months = {"January","February","March","April","May","June",
-                              "July","August","September","October","November","December"};
+            "July","August","September","October","November","December"};
 
     public static int[][][] profitData = new int[MONTHS][COMMS][DAYS];
-    
+
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
@@ -57,6 +58,7 @@ public class Main {
                 sc.close();
             } catch (FileNotFoundException e) {
                 // Dosya bulunamazsa proje kuralları gereği hata yazdırmıyoz
+            }catch(IOException e){
 
             }
         }
@@ -255,13 +257,13 @@ public class Main {
         }
         return maxSwing;
     }
-    
-    public static String compareTwoCommodities(String c1, String c2) { 
-        return "DUMMY is better by 1234"; 
+
+    public static String compareTwoCommodities(String c1, String c2) {
+        return "DUMMY is better by 1234";
     }
-    
-    public static String bestWeekOfMonth(int month) { 
-        return "DUMMY"; 
+
+    public static String bestWeekOfMonth(int month) {
+        return "DUMMY";
     }
 
     public static void main(String[] args) {
