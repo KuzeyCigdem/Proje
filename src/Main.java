@@ -210,13 +210,50 @@ public class Main {
 
         return maxStreak;
     }
-    
-    public static int daysAboveThreshold(String comm, int threshold) { 
-        return 1234; 
+    // 7. Karın thresholdu geçtiği gün sayısını bulma
+    public static int daysAboveThreshold(String comm, int threshold) {
+        int coIndex =-1;
+        for(int i=0; i<COMMS; i++) {
+            if(commodities[i].equals(comm)) {
+                coIndex = i;
+                break;
+            }
+        }
+        if (coIndex == -1) return -1;
+        int count =0;
+        // Tüm yılı gez
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                if (profitData[m][coIndex][d] > threshold) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
+    // 8. Bir ayın içindeki ardaşık iki gün arasındaki en büyük farkı bulur
+    public static int biggestDailySwing(int month) {
+        if (month < 0 || month >= MONTHS) {
+            return -99999;
+        }
+        int maxSwing =-1;
 
-    public static int biggestDailySwing(int month) { 
-        return 1234; 
+        // 27 kere döner çünkü son günün ertesi yok
+        for (int d = 0; d < DAYS - 1; d++) {
+            int day1Total =0;
+            int day2Total = 0;
+
+            for (int c = 0; c < COMMS; c++) {
+                day1Total += profitData[month][c][d];
+                day2Total += profitData[month][c][d + 1];
+            }
+            // Math.abs mutlak değer alma fonksiyonu
+            int swing = Math.abs(day1Total - day2Total);
+            if (swing > maxSwing) {
+                maxSwing = swing;
+            }
+        }
+        return maxSwing;
     }
     
     public static String compareTwoCommodities(String c1, String c2) { 
