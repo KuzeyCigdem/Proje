@@ -257,13 +257,62 @@ public class Main {
         }
         return maxSwing;
     }
-
+    // 9. İki emtianın yıllık toplam karlarına göre kıyaslar
     public static String compareTwoCommodities(String c1, String c2) {
-        return "DUMMY is better by 1234";
+        // İki emtianın da indexini buluyoruz
+        int id1 = -1;
+        int id2 = -1;
+        for(int i=0; i<COMMS; i++) {
+            if(commodities[i].equals(c1)) id1 = i;
+            if(commodities[i].equals(c2)) id2 = i;
+        }
+        if (id1 == -1 || id2 == -1) {
+            return "INVALID_COMMODITY";
+        }
+        int total1 =0;
+        int total2 = 0;
+        // Yıllık toplamları hesapla
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                total1 += profitData[m][id1][d];
+                total2 += profitData[m][id2][d];
+            }
+        }
+        if (total1 > total2) {
+            return c1 + " is better by " + (total1 - total2);
+        } else if (total2 > total1) {
+            return c2 + " is better by " + (total2 - total1);
+        } else {
+            return "Equal";
+        }
     }
-
+    // 10. Ayın en karlı haftasını bulma
     public static String bestWeekOfMonth(int month) {
-        return "DUMMY";
+        if (month < 0 || month >= MONTHS) {
+            return "INVALID_MONTH";
+        }
+        // 4 hafta için toplamları tutcak dizi
+        int[] weekProfits = new int[4];
+
+        for (int d = 0; d < DAYS; d++) {
+            int dailyTotal = 0;
+            for (int c = 0; c < COMMS; c++) {
+                dailyTotal += profitData[month][c][d];
+            }
+            // Hangi hafta olduğunu buluyoz
+            int weekIndex = d / 7;
+            weekProfits[weekIndex] += dailyTotal;
+        }
+        int maxProfit =0;
+        int bestWeekIndex = -1;
+        // En yüksek karlı haftayı seç
+        for (int w = 0; w < 4; w++) {
+            if (weekProfits[w] > maxProfit) {
+                maxProfit = weekProfits[w];
+                bestWeekIndex = w;
+            }
+        }
+        return "Week " + (bestWeekIndex + 1);
     }
 
     public static void main(String[] args) {
